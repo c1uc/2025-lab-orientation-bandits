@@ -87,27 +87,31 @@ Select arm with highest: mean_reward + confidence_bound
 When correctly implemented, you should observe:
 
 1. **UCB performs best overall** - adaptive exploration advantage
-2. **ETC with small m > ETC with large m** - for finite horizons
-3. **Clear visualization** of exploration-exploitation tradeoffs
+2. **Clear visualization** of exploration-exploitation tradeoffs
 
 ### Sample Output
 ```
 ============================================================
 FINAL RESULTS COMPARISON:
 ============================================================
-ETC with SMALL m=136 (under-exploration):
-  Final cumulative reward: 755.10
-  Final regret: 44.90
+ETC with SMALL m=10 (under-exploration):
+  Final cumulative reward: 709.80
+  Average reward per step: 0.7098
+  Final regret: 90.20
 
 ETC with LARGE m=300 (over-exploration):
   Final cumulative reward: 701.30
+  Average reward per step: 0.7013
   Final regret: 98.70
 
 UCB (adaptive exploration):
   Final cumulative reward: 765.30
+  Average reward per step: 0.7653
   Final regret: 34.70
 
-Best performing algorithm: UCB with 765.30 cumulative reward
+Optimal performance:
+  Theoretical optimal reward per step: 0.8000
+  Theoretical optimal cumulative reward: 800.00
 ```
 
 ## 🐛 Debugging Tips
@@ -128,14 +132,13 @@ After completing the implementation, consider:
 
 1. **Why does UCB outperform ETC?**
 2. **What happens if you change the arm probabilities?**
-3. **How does the optimal m for ETC change with problem parameters?**
-4. **What are the theoretical regret bounds for each algorithm?**
 
-## 📝 Submission
+## 📝 Completion
 
-Submit the following files:
-1. `main.py` - Your completed implementation
+Complete the following:
+1. `main.py` - Your algorithm implementations
 2. `result.png` - Generated comparison plot
+3. Experiment with different m values to understand the exploration-exploitation tradeoff
 
 ---
 
