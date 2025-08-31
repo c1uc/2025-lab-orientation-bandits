@@ -57,9 +57,6 @@ Complete the TODOs in `main.py` in this order:
 ```bash
 # Run your implementation
 uv run python main.py
-
-# Compare with reference solution
-uv run python solution.py
 ```
 
 ## 🔍 Key Concepts
