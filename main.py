@@ -23,12 +23,17 @@ INSTRUCTIONS:
 2. The environment, experiment runner, and plotting are provided as reference
 3. Test your implementation by running: uv run python main.py
 4. Compare your results with the reference solution in solution.py
-5. The final plot should be saved as result.png
+5. Experiment with different m values (lines 334-335) to see how exploration budget affects ETC performance
+6. The final plot should be saved as result.png
 
-GRADING CRITERIA:
-================
-- Correct implementation of ETC algorithm (50%)
-- Correct implementation of UCB algorithm (50%)
+EXPERIMENTAL EXPLORATION:
+========================
+Try modifying the exploration parameters (m_small and m_large) to understand:
+- What happens with very small m (e.g., m=10)?
+- What happens with very large m (e.g., m=500)?
+- How does the optimal m relate to the total number of steps?
+- When does UCB outperform ETC and vice versa?
+- How do the algorithms perform with different arm probability gaps?
 """
 
 import gymnasium as gym
@@ -246,28 +251,8 @@ def run_experiment(algorithm, env, n_steps: int, seed: Optional[int] = None) -> 
     return np.array(rewards)
 
 
-def calculate_optimal_m(arm_probabilities, n_steps):
-    """
-    Calculate theoretical optimal exploration rounds for ETC.
-    
-    For a bandit with K arms, the optimal m is approximately:
-    m* ≈ (4 * log(n) / Δ²)^(2/3) * n^(1/3)
-    
-    where Δ is the gap between best and second-best arm.
-    
-    This function is provided as reference - you don't need to modify it.
-    """
-    sorted_probs = np.sort(arm_probabilities)[::-1]  # Sort in descending order
-    delta = sorted_probs[0] - sorted_probs[1]  # Gap between best and second-best
-    
-    # Theoretical optimal formula (approximation)
-    optimal_m = int((4 * np.log(n_steps) / (delta**2))**(2/3) * n_steps**(1/3))
-    
-    return optimal_m, delta
-
-
 def plot_results_three_algorithms(etc_small_rewards, etc_large_rewards, ucb_rewards, 
-                                 n_steps: int, m_small: int, m_large: int, m_optimal: int):
+                                 n_steps: int, m_small: int, m_large: int):
     """
     Plot the cumulative reward curves for three algorithms.
     
@@ -288,10 +273,6 @@ def plot_results_three_algorithms(etc_small_rewards, etc_large_rewards, ucb_rewa
              color='green', linewidth=2, linestyle='-.')
     plt.plot(time_steps, ucb_rewards, label='UCB', color='red', linewidth=2)
     
-    # Add vertical line for optimal m
-    plt.axvline(x=m_optimal, color='gray', linestyle=':', alpha=0.7, 
-                label=f'Theoretical optimal m={m_optimal}')
-    
     plt.xlabel('Time Step')
     plt.ylabel('Cumulative Reward')
     plt.title('Cumulative Reward Comparison: ETC (Different m) vs UCB')
@@ -310,9 +291,6 @@ def plot_results_three_algorithms(etc_small_rewards, etc_large_rewards, ucb_rewa
     plt.plot(time_steps, etc_large_regret, label=f'ETC (m={m_large}, large) Regret', 
              color='green', linewidth=2, linestyle='-.')
     plt.plot(time_steps, ucb_regret, label='UCB Regret', color='red', linewidth=2)
-    
-    plt.axvline(x=m_optimal, color='gray', linestyle=':', alpha=0.7, 
-                label=f'Theoretical optimal m={m_optimal}')
     
     plt.xlabel('Time Step')
     plt.ylabel('Cumulative Regret')
@@ -345,17 +323,21 @@ def main():
     n_steps = 1000
     n_runs = 10  # Average over multiple runs
     
-    # Calculate theoretical optimal m and define test values
-    m_optimal, delta = calculate_optimal_m(env.arm_probabilities, n_steps)
-    m_small = max(30, int(m_optimal * 0.3))  # Smaller than optimal
-    m_large = min(300, int(m_optimal * 2.0))  # Larger than optimal
+    # Manual exploration parameter selection for comparison
+    # Note: Theoretical optimal m formulas only work reliably for 2-armed bandits
+    # For 3-armed bandits, we manually set different m values to observe the effect
+    m_small = 10   # Small exploration budget - may under-explore
+    m_large = 300  # Large exploration budget - may over-explore
+    
+    sorted_probs = np.sort(env.arm_probabilities)[::-1]
+    delta = sorted_probs[0] - sorted_probs[1]  # Gap between best and second-best
     
     print(f"Gap between best and second-best arm (Δ): {delta:.2f}")
-    print(f"Theoretical optimal m: {m_optimal}")
-    print(f"Testing with:")
-    print(f"  - Small m: {m_small} (suboptimal - too little exploration)")
-    print(f"  - Large m: {m_large} (suboptimal - too much exploration)")
+    print(f"Testing with manually selected exploration parameters:")
+    print(f"  - Small m: {m_small} (limited exploration)")
+    print(f"  - Large m: {m_large} (extensive exploration)")
     print(f"  - UCB: adaptive exploration")
+    print(f"Note: Try different m values to see how exploration budget affects performance!")
     print()
     
     # Initialize algorithms
@@ -428,7 +410,7 @@ def main():
         
         # Plot results
         plot_results_three_algorithms(etc_small_mean_rewards, etc_large_mean_rewards, 
-                                     ucb_mean_rewards, n_steps, m_small, m_large, m_optimal)
+                                     ucb_mean_rewards, n_steps, m_small, m_large)
         
     except Exception as e:
         print(f"\nError during experiment: {e}")
@@ -485,6 +467,5 @@ DEBUGGING TIPS:
 EXPECTED RESULTS:
 ================
 - UCB should perform best overall
-- ETC with small m should beat ETC with large m
 - All algorithms should improve over random (≈0.467 reward per step)
 """
