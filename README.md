@@ -20,7 +20,6 @@ You will implement:
 ```
 2025-Lab-Orientation-Bandits/
 ├── main.py          # Student template (YOUR WORK HERE)
-├── solution.py      # Complete reference implementation
 ├── result.png       # Generated comparison plot
 ├── pyproject.toml   # Project dependencies
 └── README.md        # This file
@@ -119,8 +118,7 @@ Best performing algorithm: UCB with 765.30 cumulative reward
 1. **Start incrementally**: Implement and test each TODO section separately
 2. **Use small experiments**: Set `n_steps=100` during development
 3. **Print intermediate values**: Debug your algorithm logic
-4. **Compare with solution**: Check `solution.py` if stuck
-5. **Validate environment**: Test bandit environment first
+4. **Validate environment**: Test bandit environment first
 
 ### Common Issues
 - **Division by zero**: Handle arm counts = 0 in UCB
@@ -141,26 +139,6 @@ After completing the implementation, consider:
 Submit the following files:
 1. `main.py` - Your completed implementation
 2. `result.png` - Generated comparison plot
-
-## 🏆 Grading Rubric
-
-| Component | Points | Criteria |
-|-----------|--------|----------|
-| ETC Algorithm | 50% | Correct exploration/commitment phases, proper state management |
-| UCB Algorithm | 50% | Correct confidence bound calculation, proper arm selection |
-
-## 📚 Additional Resources
-
-- [Multi-Armed Bandit Tutorial](https://banditalgs.com/)
-- [OpenAI Gym Documentation](https://gymnasium.farama.org/)
-- [Sutton & Barto: Reinforcement Learning Book](http://incompleteideas.net/book/the-book.html)
-
-## ❓ Getting Help
-
-1. **Check `solution.py`** for reference implementation
-2. **Read error messages carefully** - they often point to the issue
-3. **Use print statements** to debug algorithm behavior
-4. **Ask for help** if you're stuck on conceptual understanding
 
 ---
 
