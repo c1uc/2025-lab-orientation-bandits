@@ -56,7 +56,7 @@ Complete the TODOs in `main.py` in this order:
 
 ```bash
 # Run your implementation
-uv run python main.py
+uv run main.py
 ```
 
 ## 🔍 Key Concepts
